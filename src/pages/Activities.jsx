@@ -3,6 +3,8 @@ import { AuthContext } from "../context/auth.context";
 import { fetchAll } from "../functions/api.calls";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 const api_url = import.meta.env.VITE_API_URL;
 
 function Activities() {
@@ -17,21 +19,26 @@ function Activities() {
     fetchActivities();
   }, []);
 
-  return !activities
-    ? <h1>Cargando datos...</h1>
-    : (
-      <div className="activities-wrapper">
-        {activities.map((activity) => {
-          return (
-            <div key={activity._id} className="activity-item">
-              <h3>{activity.name}</h3>
-              <Link to={`/activities/${activity._id}`}><Button variant="contained">Ver</Button></Link>
-              <Link><Button variant="contained">Apuntarme</Button></Link>
+  return !activities ? (
+    <h1>Cargando datos...</h1>
+  ) : (
+    <div className="activities-wrapper">
+      {activities.map((activity) => {
+        return (
+          <div key={activity._id} className="activities-item">
+            <h3>{activity.name}</h3>
+            <div className="activities-buttons">
+              <Link to={`/activities/${activity._id}`}>
+              <Button variant="contained">
+                  <FormatListBulletedIcon />
+                </Button>
+              </Link>
             </div>
-          )
-        })}
-      </div>
-    )
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 export default Activities;

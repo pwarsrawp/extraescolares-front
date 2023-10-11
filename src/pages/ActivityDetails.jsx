@@ -41,18 +41,15 @@ function ActivityDetails() {
       <h3>Precio no socios: <span>{activity.noMemberPrice} €/mes</span></h3>
       <h3>Empresa: <span>{activity.company}</span></h3>
       <h3>Nº plazas: <span>{activity.slots}</span></h3>
-      {user?.isAdmin ? (
+      {user?.isAdmin && (
         <div className="activity-details-buttons">
           <button>Editar</button>
           <button>Borrar</button>
         </div>
-      ) : (
-        <div className="activity-details-buttons">
-          <button>Lista de espera</button>
-        </div>
       )}
       <div className="activity-details-waiting-list">
-       
+        <h3>Lista de espera</h3>
+        {activity.list.map((student, index) => <p key={index}>{index + 1} {student}</p>)}
       </div>
     </div>
   );

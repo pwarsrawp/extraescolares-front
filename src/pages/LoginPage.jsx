@@ -4,7 +4,7 @@ import { AuthContext } from "../context/auth.context";
 import { postOne } from "../functions/api.calls";
 import Button from '@mui/material/Button';
 import { TextField } from "@mui/material";
-const api_url = import.meta.env.VITE_API_URL;
+const api_url = import.meta.env.API_URL;
 
 function LoginPage() {
   const [email, setEmail] = useState("");

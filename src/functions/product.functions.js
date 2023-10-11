@@ -1,4 +1,4 @@
-const api_url = import.meta.env.VITE_API_URL;
+const api_url = import.meta.env.API_URL;
 import { fetchOne, updateOne } from "../functions/api.calls";
 
 const filterProducts = (query, products, setter) => {

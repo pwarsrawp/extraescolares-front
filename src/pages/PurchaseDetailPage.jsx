@@ -7,7 +7,7 @@ import Footer from "../components/Footer";
 import axios from "axios";
 import ErrorPage from "./ErrorPage";
 
-const api_url = import.meta.env.VITE_API_URL;
+const api_url = import.meta.env.API_URL;
 
 function PurchasePage() {
   const [product, setProduct] = useState(null);

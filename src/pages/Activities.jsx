@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-const api_url = import.meta.env.VITE_API_URL;
+const api_url = import.meta.env.API_URL;
 
 function Activities() {
   const [activities, setActivities] = useState([]);

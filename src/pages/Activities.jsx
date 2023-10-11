@@ -13,7 +13,7 @@ function Activities() {
 
   useEffect(() => {
     const fetchActivities = async () => {
-      const activitiesData = await fetchAll(`${api_url}/activities`);
+      const activitiesData = await fetchAll(`https://extraescolares-back.adaptable.app/activities`);
       setActivities(activitiesData);
     };
     fetchActivities();

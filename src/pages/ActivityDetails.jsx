@@ -3,8 +3,7 @@ import axios from "axios";
 import Spinner from "../components/Spinner";
 import { AuthContext } from "../context/auth.context";
 import { useParams } from "react-router-dom";
-
-const api_url = import.meta.env.API_URL;
+const api_url = import.meta.env.VITE_API_URL;
 
 function ActivityDetails() {
   const [activity, setActivity] = useState(null);

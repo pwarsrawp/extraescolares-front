@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
 import { deleteOne } from "../functions/api.calls";
 import { useNavigate } from "react-router-dom";
-const api_url = import.meta.env.API_URL;
+const api_url = import.meta.env.VITE_API_URL;
 
 
 function Delete() {

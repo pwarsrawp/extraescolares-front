@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/auth.context";
 import { fetchAll } from "../functions/api.calls";
-const api_url = import.meta.env.API_URL;
+const api_url = import.meta.env.VITE_API_URL;
 import tablaClases from "../assets/Tabla-actividades-extraescolares-Curso-2023-2024.webp"
 
 function HomePage() {

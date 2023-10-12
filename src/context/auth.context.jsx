@@ -1,7 +1,7 @@
 import { useState, useEffect, createContext } from "react";
 import axios from "axios";
 import { fetchOne } from "../functions/api.calls";
-const api_url = import.meta.env.API_URL;
+const api_url = import.meta.env.VITE_API_URL;
 const AuthContext = createContext();
 
 function AuthContextWrapper({ children }) {

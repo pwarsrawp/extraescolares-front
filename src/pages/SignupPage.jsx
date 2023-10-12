@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postOne } from "../functions/api.calls";
 import { Button, TextField } from "@mui/material";
-const api_url = import.meta.env.API_URL;
+const api_url = import.meta.env.VITE_API_URL;
 
 function SignupPage() {
   const [email, setEmail] = useState("");

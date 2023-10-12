@@ -3,6 +3,8 @@ import axios from "axios";
 import Spinner from "../components/Spinner";
 import { AuthContext } from "../context/auth.context";
 import { useParams } from "react-router-dom";
+import { Button } from "@mui/material";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 const api_url = import.meta.env.VITE_API_URL;
 
 function ActivityDetails() {
@@ -69,14 +71,21 @@ function ActivityDetails() {
       <br />
       <br />
       <div className="activity-details-waiting-list">
-        <h3>Lista de espera</h3>
+        <div style={{display: "flex", gap: '10px'}}>
+          <h3>Lista de espera</h3>
+          <Button color="primary" variant="contained">
+            <PlaylistAddIcon />
+          </Button>
+        </div>
+
         <br />
         {activity.list.map((student, index) => (
-          <div key={index} style={{display: 'flex', gap: '20px', marginBottom: '15px'}}>
+          <div
+            key={index}
+            style={{ display: "flex", gap: "20px", marginBottom: "15px" }}
+          >
             <h2>{index + 1}</h2>
-            <p>
-               {student}
-            </p>
+            <p>{student}</p>
             <br />
           </div>
         ))}

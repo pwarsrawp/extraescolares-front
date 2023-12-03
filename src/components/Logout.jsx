@@ -1,20 +1,15 @@
-import { useContext } from "react";
-import { AuthContext } from "../context/auth.context";
+import { useContext } from 'react';
+import { AuthContext } from '../context/auth.context';
+import { Button } from '@mui/material';
 
 function LogoutButton() {
   const { isLoggedIn, logout } = useContext(AuthContext);
 
   if (!isLoggedIn) {
-    return null; 
+    return null;
   }
 
-  return (
-  <div>
-    <button onClick={logout} className="profile-page-logout-button">Logout</button>
-  </div>
-  );
+  return <Button onClick={logout}>Logout</Button>;
 }
 
 export default LogoutButton;
-
-

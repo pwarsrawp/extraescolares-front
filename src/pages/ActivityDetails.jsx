@@ -2,13 +2,16 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Spinner from "../components/Spinner";
 import { AuthContext } from "../context/auth.context";
-import { useParams } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Navigate, useParams } from "react-router-dom";
+import { Button, TextField } from "@mui/material";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import { updateOne } from "../functions/api.calls";
 const api_url = import.meta.env.VITE_API_URL;
 
 function ActivityDetails() {
   const [activity, setActivity] = useState(null);
+  const [listToUpdate, setListToUpdate] = useState([]);
+  const [name, setName] = useState('');
   // const [waitingList, setWaitingList] = useState(null);
   const { activityId } = useParams();
   const { user } = useContext(AuthContext);
@@ -27,7 +30,15 @@ function ActivityDetails() {
       }
     };
     getOneActivity();
-  }, [activityId]);
+  }, [activityId, listToUpdate]);
+// break point
+  async function handleAddToListSubmit(event) {
+    event.preventDefault();
+    setListToUpdate([...activity.list])
+    listToUpdate.push({name: name, responsible: user})
+    console.log(listToUpdate)
+    await updateOne(`${api_url}/activities/${activityId}`, {list: listToUpdate})
+  }
 
   return !activity ? (
     <Spinner />
@@ -70,12 +81,30 @@ function ActivityDetails() {
       )}
       <br />
       <br />
+      <div>
+        <form onSubmit={handleAddToListSubmit}>
+          <TextField
+          type="name"
+          name="name"
+          value={name}
+          onChange={(event) => {
+            setName(event.target.value);
+          }}
+          id="outlined-basic"
+          label="Nombre de alumno"
+          variant="outlined"
+        />
+          <Button color="primary" variant="contained" type="submit">
+          <PlaylistAddIcon />
+        </Button>
+        </form>
+        
+      </div>
+      <br />
+      <br />
       <div className="activity-details-waiting-list">
-        <div style={{display: "flex", gap: '10px'}}>
+        <div style={{ display: "flex", gap: "10px" }}>
           <h3>Lista de espera</h3>
-          <Button color="primary" variant="contained">
-            <PlaylistAddIcon />
-          </Button>
         </div>
 
         <br />
@@ -85,7 +114,8 @@ function ActivityDetails() {
             style={{ display: "flex", gap: "20px", marginBottom: "15px" }}
           >
             <h2>{index + 1}</h2>
-            <p>{student}</p>
+            <p>{student.name}</p>
+            <p>{student.responsible}</p>
             <br />
           </div>
         ))}

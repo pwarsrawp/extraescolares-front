@@ -113,6 +113,7 @@ body {
   /* font-family: "Poppins", sans-serif; */
   font-family: "Lato", sans-serif;
   color: var(--clr-text-light);
+  background-color: #F6F6F6;
 }
 
 ol,

@@ -1,30 +1,31 @@
-import { useState, useEffect, createContext } from "react";
-import axios from "axios";
-import { fetchOne } from "../functions/api.calls";
+import { useState, useEffect, createContext } from 'react';
+import axios from 'axios';
+import { fetchOne } from '../functions/api.calls';
 const api_url = import.meta.env.VITE_API_URL;
 const AuthContext = createContext();
 
 function AuthContextWrapper({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);  
+  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [userUpdate, setUserUpdate] = useState(false);
 
   /* LOGOUT */
   const logout = () => {
     try {
-      localStorage.removeItem("authToken");
+      localStorage.removeItem('authToken');
       setUser(null);
       setIsLoggedIn(false);
       setIsLoading(false);
     } catch (error) {
-      console.error("Error while logging out:", error);
+      console.error('Error while logging out:', error);
     }
   };
 
   /* AUTHENTICATION */
-  const userAuthentication = async () => {
-    const token = localStorage.getItem("authToken");
+  const userAuthentication = async (dispatch) => {
+    console.log(dispatch);
+    const token = localStorage.getItem('authToken');
 
     if (token) {
       try {
@@ -34,18 +35,18 @@ function AuthContextWrapper({ children }) {
 
         // authorization successful
         setUser(data.currentUser);
-        setIsLoading(false);
         setIsLoggedIn(true);
+        setIsLoading(false);
       } catch (error) {
         setUser(null);
-        setIsLoading(false);
         setIsLoggedIn(false);
+        setIsLoading(false);
       }
     } else {
       // reset states
       setUser(null);
-      setIsLoading(false);
       setIsLoggedIn(false);
+      setIsLoading(false);
     }
   };
 
@@ -61,7 +62,7 @@ function AuthContextWrapper({ children }) {
           setUser(response);
           setUserUpdate(false);
         } catch (error) {
-          console.log("error updating user: ", error);
+          console.log('error updating user: ', error);
         }
       };
       fetchUser();

@@ -1,7 +1,7 @@
-import { useContext } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { AuthContext } from "../context/auth.context";
-import styled from "styled-components";
+import { useContext } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import { AuthContext } from '../context/auth.context';
+import styled from 'styled-components';
 
 const NavContainer = styled.nav`
   display: flex;
@@ -31,32 +31,31 @@ const NavContainer = styled.nav`
   }
 `;
 
-
 function Navbar() {
   const { isLoggedIn } = useContext(AuthContext);
 
   return (
     <NavContainer>
-      <Link to="/" className="title">
+      <Link to='/' className='title'>
         Inicio
       </Link>
       <ul>
         <li>
-          <NavLink to="/activities">Actividades</NavLink>
+          <NavLink to='/activities'>Actividades</NavLink>
         </li>
         {!isLoggedIn && (
           <li>
-            <NavLink to="/signup">Registro</NavLink>
+            <NavLink to='/signup'>Registro</NavLink>
           </li>
         )}
         {!isLoggedIn && (
           <li>
-            <NavLink to="/login">Acceso</NavLink>
+            <NavLink to='/login'>Acceso</NavLink>
           </li>
         )}
         {isLoggedIn && (
           <li>
-            <NavLink to="/profile">Mi cuenta</NavLink>
+            <NavLink to='/profile'>Mi cuenta</NavLink>
           </li>
         )}
       </ul>

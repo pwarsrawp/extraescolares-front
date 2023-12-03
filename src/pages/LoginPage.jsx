@@ -1,14 +1,14 @@
-import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/auth.context";
-import { postOne } from "../functions/api.calls";
+import { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/auth.context';
+import { postOne } from '../functions/api.calls';
 import Button from '@mui/material/Button';
-import { TextField } from "@mui/material";
+import { TextField } from '@mui/material';
 const api_url = import.meta.env.VITE_API_URL;
 
 function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(undefined);
   const { userAuthentication } = useContext(AuthContext);
 
@@ -20,17 +20,17 @@ function LoginPage() {
     try {
       const { data } = await postOne(`${api_url}/auth/login`, {
         email: email,
-        password: password
+        password: password,
       });
 
       try {
-        localStorage.setItem("authToken", data.token);
+        localStorage.setItem('authToken', data.token);
       } catch (error) {
-        console.error("Error setting authToken in localStorage:", error);
+        console.error('Error setting authToken in localStorage:', error);
       }
 
       await userAuthentication();
-      navigate("/profile");
+      navigate('/profile');
     } catch (error) {
       if (
         error.response &&
@@ -39,13 +39,13 @@ function LoginPage() {
       ) {
         setErrorMessage(error.response.data.errorMessage);
       } else {
-        setErrorMessage("An error occurred while logging in.");
+        setErrorMessage('An error occurred while logging in.');
       }
     }
   };
 
   return (
-    <div id="login">
+    <div id='login'>
       <h1>Acceso</h1>
       <form onSubmit={handleLoginSubmit}>
         {/* <input
@@ -57,35 +57,36 @@ function LoginPage() {
           }}
         /> */}
         <TextField
-          type="email"
-          name="email"
+          type='email'
+          name='email'
           value={email}
           onChange={(event) => {
             setEmail(event.target.value);
           }}
-          id="outlined-basic"
-          label="Email"
-          variant="outlined"
+          id='outlined-basic'
+          label='Email'
+          variant='outlined'
         />
         <TextField
-          type="password"
-          name="password"
+          type='password'
+          name='password'
           value={password}
           onChange={(event) => {
             setPassword(event.target.value);
           }}
-          id="outlined-basic"
-          label="Contraseña"
-          variant="outlined"
+          id='outlined-basic'
+          label='Contraseña'
+          variant='outlined'
         />
-        <Button type='submit' variant='contained'>Acceder</Button>
-        <div className="form-bottom-text">
+        <Button type='submit' variant='contained'>
+          Acceder
+        </Button>
+        <div className='form-bottom-text'>
           <p>No tiene cuenta aún?</p>
-          <Link to={"/signup"}>Crear cuenta</Link>
+          <Link to={'/signup'}>Crear cuenta</Link>
         </div>
       </form>
-      {errorMessage ? <p className="error-message">{errorMessage}</p> : <p></p>}
-
+      {errorMessage ? <p className='error-message'>{errorMessage}</p> : <p></p>}
     </div>
   );
 }

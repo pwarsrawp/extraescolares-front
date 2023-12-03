@@ -1,14 +1,17 @@
 import { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
 import { fetchOne } from '../functions/api.calls';
+import { useNavigate } from 'react-router-dom';
 const api_url = import.meta.env.VITE_API_URL;
 const AuthContext = createContext();
 
-function AuthContextWrapper({ children }) {
+function AuthContextWrapper(props) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [userUpdate, setUserUpdate] = useState(false);
+
+  const navigate = useNavigate();
 
   /* LOGOUT */
   const logout = () => {
@@ -17,14 +20,14 @@ function AuthContextWrapper({ children }) {
       setUser(null);
       setIsLoggedIn(false);
       setIsLoading(false);
+      navigate('/');
     } catch (error) {
       console.error('Error while logging out:', error);
     }
   };
 
   /* AUTHENTICATION */
-  const userAuthentication = async (dispatch) => {
-    console.log(dispatch);
+  const userAuthentication = async () => {
     const token = localStorage.getItem('authToken');
 
     if (token) {
@@ -80,7 +83,7 @@ function AuthContextWrapper({ children }) {
         logout,
       }}
     >
-      {children}
+      {props.children}
     </AuthContext.Provider>
   );
 }

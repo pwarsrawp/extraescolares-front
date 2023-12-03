@@ -1,3 +1,4 @@
+import { useContext, useState } from 'react';
 import {
   Button,
   MenuItem,
@@ -7,11 +8,8 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useContext, useState } from 'react';
-import { postOne, updateOne } from '../../functions/api.calls';
-
+import { postOne } from '../../functions/api.calls';
 import { AuthContext } from '../../context/auth.context';
-
 const api_url = import.meta.env.VITE_API_URL;
 
 const style = {
@@ -25,28 +23,26 @@ const style = {
   padding: '2rem',
 };
 
-const NewStudentModal = ({
-  newModal,
-  setNewModal,
-  user,
-  updates,
-  fetchUserData,
-}) => {
+const NewStudentModal = ({ newModal, setNewModal, fetchStudents }) => {
+  const { user, userAuthentication } = useContext(AuthContext);
   const [studentName, setStudentName] = useState('');
   const [studentLevel, setStudentLevel] = useState('');
 
   const closeNewModal = () => setNewModal(false);
 
   const createStudent = async () => {
-    const newStudent = {
+    const body = {
       name: studentName,
       level: studentLevel,
+      user: user._id,
     };
-    const body = { $push: { students: newStudent } };
     try {
-      const response = await updateOne(`${api_url}/users/${user._id}`, body);
+      const response = await postOne(`${api_url}/students/create`, body);
+      setStudentLevel(undefined);
+      setStudentName(undefined);
       closeNewModal();
-      fetchUserData();
+      userAuthentication();
+      fetchStudents();
       return response;
     } catch (error) {
       console.log('An error ocurred creating student', error);

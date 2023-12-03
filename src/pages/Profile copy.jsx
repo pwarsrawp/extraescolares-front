@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import {
   Box,
   Button,
@@ -9,13 +8,15 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { v4 as uuidv4 } from 'uuid';
 import { AuthContext } from '../context/auth.context';
-import { deleteOne, fetchSome } from '../functions/api.calls';
-import LogoutButton from '../components/Logout';
+
 import EditStudentModal from '../components/modals/EditStudentModal';
 import NewStudentModal from '../components/modals/NewStudentModal';
+import { fetchOne, updateOne } from '../functions/api.calls';
+import LogoutButton from '../components/Logout';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const api_url = import.meta.env.VITE_API_URL;
 
@@ -24,19 +25,20 @@ const Profile = () => {
   const [editModal, setEditModal] = useState(false);
   const [newModal, setNewModal] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState('');
-  const [students, setStudents] = useState([]);
+  const [userData, setUserData] = useState();
 
-  const fetchStudents = async () => {
-    const response = await fetchSome(`${api_url}/students/some/${user._id}`, {
-      _id: user._id,
-    });
-    setStudents(response);
+  const fetchUserData = async () => {
+    const user = sessionStorage.getItem('userId');
+    const response = await fetchOne(`${api_url}/users/${user}`);
+    setUserData(response);
+    console.log(userData);
   };
 
   useEffect(() => {
-    userAuthentication();
-    fetchStudents();
-  }, []);
+    if (!isLoading) {
+      userAuthentication();
+    }
+  }, [JSON.stringify(userData)]);
 
   const openEditModal = (student) => {
     setSelectedStudent(student);
@@ -48,9 +50,14 @@ const Profile = () => {
   };
 
   const handleDeleteStudent = async (student) => {
-    await deleteOne(`${api_url}/students/${student._id}`);
-    userAuthentication();
-    fetchStudents();
+    const body = { $pull: { students: { name: `${student.name}` } } };
+    try {
+      const response = await updateOne(`${api_url}/users/${user._id}`, body);
+      fetchUserData();
+      return response;
+    } catch (error) {
+      console.log('An error ocurred deleting student', error);
+    }
   };
 
   return !isLoading ? (
@@ -58,13 +65,15 @@ const Profile = () => {
       <EditStudentModal
         editModal={editModal}
         setEditModal={setEditModal}
-        fetchStudents={fetchStudents}
+        user={user}
         student={selectedStudent}
+        fetchUserData={fetchUserData}
       />
       <NewStudentModal
         newModal={newModal}
         setNewModal={setNewModal}
-        fetchStudents={fetchStudents}
+        user={user}
+        fetchUserData={fetchUserData}
       />
       <Grid container spacing={4}>
         <Grid item xs={12}>
@@ -121,7 +130,7 @@ const Profile = () => {
                   Añadir alumno
                 </Button>
               </Stack>
-              {students?.map((student) => {
+              {userData?.students?.map((student) => {
                 return (
                   <Stack direction='row' key={uuidv4()}>
                     <Stack>

@@ -7,8 +7,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { updateOne } from '../../functions/api.calls';
+import { AuthContext } from '../../context/auth.context';
 
 const api_url = import.meta.env.VITE_API_URL;
 
@@ -26,29 +27,35 @@ const style = {
 const EditStudentModal = ({
   editModal,
   setEditModal,
+  fetchStudents,
   student,
-  user,
-  fetchUserData,
 }) => {
   const [studentName, setStudentName] = useState(student?.name);
   const [studentLevel, setStudentLevel] = useState(student?.level);
-  const [studentId, setStudentId] = useState(student?.id);
+  const { userAuthentication } = useContext(AuthContext);
 
   const closeEditModal = () => setEditModal(false);
+  const handleNameInput = (e) => setStudentName(e.target.value);
+  const handleLevelInput = (e) => setStudentLevel(e.target.value);
 
-  const updateStudent = () => {
-    const dataToUpdate = {
+  const updateStudent = async () => {
+    const body = {
       name: studentName,
       level: studentLevel,
     };
-    const body = { $set: { students: dataToUpdate } };
     try {
-      const response = updateOne(`${api_url}/users/${user._id}`, body);
+      const response = await updateOne(
+        `${api_url}/students/${student._id}`,
+        body
+      );
+      setStudentLevel(undefined);
+      setStudentName(undefined);
       closeEditModal();
-      fetchUserData();
+      userAuthentication();
+      fetchStudents();
       return response;
     } catch (error) {
-      console.log('An error ocurred creating student', error);
+      console.log('An error ocurred modifying student', error);
     }
   };
 
@@ -64,15 +71,13 @@ const EditStudentModal = ({
           label='Nombre completo'
           defaultValue={student.name}
           value={studentName}
-          onChange={(e) => {
-            setStudentName(e.target.value);
-          }}
+          onChange={handleNameInput}
         />
         <Select
           value={studentLevel}
           defaultValue={student.level}
           label='Curso'
-          onChange={(e) => setStudentLevel(e.target.value)}
+          onChange={handleLevelInput}
         >
           <MenuItem value='3 años'>3 años</MenuItem>
           <MenuItem value='4 años'>4 años</MenuItem>

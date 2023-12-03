@@ -22,9 +22,9 @@ const fetchOne = async (url) => {
 };
 
 /* GET some */
-const fetchSome = async (url) => {
+const fetchSome = async (url, body) => {
   try {
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(url, body);
     return data;
   } catch (error) {
     console.log('Could not fetch some data: ', error);

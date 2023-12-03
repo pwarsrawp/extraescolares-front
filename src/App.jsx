@@ -10,12 +10,13 @@ import ActivityDetails from './pages/ActivityDetails';
 import Lists from './pages/Lists';
 import ListDetails from './pages/ListDetails';
 import { Box } from '@mui/material';
+import IsPrivate from './context/auth.private';
 
 function App() {
   return (
     <>
       <Header />
-      <Box p={2} maxWidth={1368} sx={{ margin: '0 auto' }}>
+      <Box p={1} maxWidth={1368} sx={{ margin: '0 auto' }}>
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/signup' element={<SignupPage />} />
@@ -24,7 +25,14 @@ function App() {
           <Route path='/activities' element={<Activities />} />
           <Route path='/lists/:listId' element={<ListDetails />} />
           <Route path='/lists/' element={<Lists />} />
-          <Route path='/profile' element={<Profile />} />
+          <Route
+            path='/profile'
+            element={
+              <IsPrivate>
+                <Profile />
+              </IsPrivate>
+            }
+          />
           <Route path='*' element={<Error />} />
         </Routes>
       </Box>

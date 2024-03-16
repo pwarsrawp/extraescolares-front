@@ -18,5 +18,5 @@ export const ButtonContained = ({children, onClick, ...rest}) => {
 }
 
 export const ButtonOutlined = ({children, onClick, ...rest}) => {
-  return <Button variant='outlined' sx={{fontWeight: 600}} onClick={onClick} {...rest}>{children}</Button>
+  return <Button variant='outlined' onClick={onClick} {...rest}>{children}</Button>
 }

@@ -1,4 +1,5 @@
-import { Button, MenuItem, Modal, Select, Stack, TextField, Typography } from '@mui/material';
+import { MenuItem, Modal, Select, Stack, TextField, Typography } from '@mui/material';
+import { ButtonContained } from '../Templates';
 
 const style = {
   position: 'absolute',
@@ -43,7 +44,7 @@ const NewStudentModal = ({ openModal, closeModal, newStudent, setNewStudent, han
           <MenuItem value='5º primaria'>5º primaria</MenuItem>
           <MenuItem value='6º primaria'>6º primaria</MenuItem>
         </Select>
-        <Button onClick={handleCreateStudent}>Guardar</Button>
+        <ButtonContained onClick={handleCreateStudent}>Guardar</ButtonContained>
       </Stack>
     </Modal>
   );

@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { Box, Button, Grid, Paper, Skeleton, Stack, Typography } from '@mui/material';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import LogoutButton from '../components/Logout';
 import EditStudentModal from '../components/modals/EditStudentModal';
 import NewStudentModal from '../components/modals/NewStudentModal';
 import useAuth from '../hooks/useAuth';
@@ -12,10 +11,11 @@ import DeleteStudentModal from '../components/modals/DeleteStudentModal';
 import DeleteAccountModal from '../components/modals/DeleteAccountModal';
 import { deleteUser } from '../functions/users';
 import { useNavigate } from 'react-router-dom';
+import { ButtonOutlined } from '../components/Templates';
 
 const Profile = () => {
   const navigate = useNavigate();
-  const { user, isLoading, userAuthentication } = useAuth();
+  const { user, isLoading, userAuthentication, logout } = useAuth();
   const [editModal, setEditModal] = useState(false);
   const [newModal, setNewModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -181,10 +181,12 @@ const Profile = () => {
         <Grid container>
           <Grid item xs={12}>
             <Stack direction='row' justifyContent='center' spacing={2} pt={4}>
-              <LogoutButton variant='contained'>Desconectar</LogoutButton>
-              <Button variant='contained' onClick={openDeleteAccountModal}>
+            <ButtonOutlined onClick={logout}>
+                Desconectar
+              </ButtonOutlined>
+              <ButtonOutlined color='error' onClick={openDeleteAccountModal}>
                 Borrar cuenta
-              </Button>
+              </ButtonOutlined>
             </Stack>
           </Grid>
         </Grid>

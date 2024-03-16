@@ -21,9 +21,9 @@ export const getActivity = async (activityId) => {
   }
 };
 
-export const updateActivity = async (body) => {
+export const updateActivity = async (activityId, body) => {
   try {
-    await axios.put(`${API_URL}/${ENDPOINT}`, body);
+    await axios.put(`${API_URL}/${ENDPOINT}/${activityId}`, body);
   } catch (error) {
     console.log('Could not update specific entry: ', error);
   }
@@ -31,7 +31,7 @@ export const updateActivity = async (body) => {
 
 export const createActivity = async (body) => {
   try {
-    const response = await axios.post(`${API_URL}/${ENDPOINT}`, body);
+    const response = await axios.post(`${API_URL}/${ENDPOINT}/create`, body);
     return response;
   } catch (error) {
     console.log('Could not create new entry: ', error);
@@ -41,7 +41,7 @@ export const createActivity = async (body) => {
 
 export const deleteActivity = async (activityId) => {
   try {
-    await axios.delete(`${API_URL}/${ENDPOINT}`, activityId);
+    await axios.delete(`${API_URL}/${ENDPOINT}/${activityId}`);
   } catch (error) {
     console.log('Could not fetch specific data: ', error);
   }

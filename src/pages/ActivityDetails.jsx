@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { Button, Paper, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography, styled } from '@mui/material';
 import Spinner from '../components/Spinner';
-import { addToCurrentList, addToWaitingList, getActivity, removeFromCurrentList, removeFromWaitingList, resetCurrentList, resetWaitingList } from '../functions/activities';
+import { addToCurrentList, addToWaitingList, getActivity, removeFromCurrentList, removeFromWaitingList, resetCurrentList, resetWaitingList, updateActivity } from '../functions/activities';
 import { getStudentsByUserId } from '../functions/students';
 import useAuth from '../hooks/useAuth';
 import WaitingListStudentCard from '../components/WaitingListStudentCard';
@@ -13,6 +13,8 @@ import AddToWaitingListModal from '../components/modals/AddToWaitingListModal';
 import RemoveFromCurrentListModal from '../components/modals/RemoveFromCurrentListModal';
 import RemoveFromWaitingListModal from '../components/modals/RemoveFromWaitingListModal';
 import CurrentListStudentCard from '../components/CurrentListStudentCard';
+import { ButtonOutlined } from '../components/Templates';
+import EditActivityModal from '../components/modals/EditActivityModal';
 
 const InfoTitle = ({ children }) => {
   return <Typography variant='body1'>{children}</Typography>;
@@ -48,6 +50,7 @@ function ActivityDetails() {
   const [showAddToWaitingListModal, setShowAddToWaitingListModal] = useState(false);
   const [showRemoveFromWaitingListModal, setShowRemoveFromWaitingListModal] = useState(false);
   const [showRemoveFromCurrentListModal, setShowRemoveFromCurrentListModal] = useState(false);
+  const [showEditActivityModal, setShowEditActivityModal] = useState(false);
 
   const getActivityData = async () => {
     try {
@@ -128,11 +131,18 @@ function ActivityDetails() {
     getActivityData();
   };
 
+  const onEditActivity = async (activityData) => {
+    await updateActivity(activity._id, activityData)
+    setShowEditActivityModal(false)
+    getActivityData()
+  }
+
   ///////////////////////////////////////////
   ////////// RENDER /////////////////////////
   ///////////////////////////////////////////
   return !isLoading ? (
     <Stack width='100%' maxWidth='95%'>
+      <EditActivityModal modalState={showEditActivityModal} handleModal={setShowEditActivityModal} onEditActivity={onEditActivity} activity={activity}/>
       <ResetListModal modalState={showResetListModal} handleModal={setShowResetListModal} onResetList={onResetList} resetListType={resetListType} />
       <AddToWaitingListModal
         modalState={showAddToWaitingListModal}
@@ -203,6 +213,13 @@ function ActivityDetails() {
         <Stack direction='row' alignItems='center' spacing={2}>
           <InfoTitle>Nº plazas:</InfoTitle>
           <InfoContent>{activity.slots}</InfoContent>
+        </Stack>
+        <Stack direction='row' pt={1}>
+          {user.isAdmin && (
+            <ButtonOutlined onClick={() => setShowEditActivityModal(true)}>
+              Editar actividad
+            </ButtonOutlined>
+          )}
         </Stack>
       </InfoStack>
       <Stack direction='row' alignItems='center' p={1} justifyContent='space-between'>

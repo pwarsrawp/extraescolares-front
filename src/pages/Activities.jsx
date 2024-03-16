@@ -1,27 +1,17 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { fetchAll } from '../functions/api.calls';
-import {
-  Button,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  Typography,
-} from '@mui/material';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-const api_url = import.meta.env.VITE_API_URL;
+import { Button, Paper, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material';
+import { getActivities } from '../functions/activities';
 
 function Activities() {
   const [activities, setActivities] = useState([]);
 
   useEffect(() => {
-    const fetchActivities = async () => {
-      const activitiesData = await fetchAll(`${api_url}/activities`);
+    const loadData = async () => {
+      const activitiesData = await getActivities();
       setActivities(activitiesData);
     };
-    fetchActivities();
+    loadData();
   }, []);
 
   return !activities ? (
@@ -40,7 +30,7 @@ function Activities() {
                   <Typography variant='body1'>{activity.level}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Button color='primary' href={`/activities/${activity._id}`}>
+                  <Button color='primary' href={`/actividades/${activity._id}`}>
                     Detalles
                   </Button>
                 </TableCell>

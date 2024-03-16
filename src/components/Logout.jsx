@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { AuthContext } from '../context/auth.context';
+import { AuthContext } from '../contexts/AuthContext';
 import { Button } from '@mui/material';
 
 function LogoutButton() {

@@ -1,16 +1,4 @@
-import { useContext, useState } from 'react';
-import {
-  Button,
-  MenuItem,
-  Modal,
-  Select,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { postOne } from '../../functions/api.calls';
-import { AuthContext } from '../../context/auth.context';
-const api_url = import.meta.env.VITE_API_URL;
+import { Button, MenuItem, Modal, Select, Stack, TextField, Typography } from '@mui/material';
 
 const style = {
   position: 'absolute',
@@ -18,39 +6,19 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
+  maxWidth: '95%',
   backgroundColor: '#FFFFFF',
   boxShadow: 24,
-  padding: '2rem',
+  padding: '4rem',
 };
 
-const NewStudentModal = ({ newModal, setNewModal, fetchStudents }) => {
-  const { user, userAuthentication } = useContext(AuthContext);
-  const [studentName, setStudentName] = useState('');
-  const [studentLevel, setStudentLevel] = useState('');
-
-  const closeNewModal = () => setNewModal(false);
-
-  const createStudent = async () => {
-    const body = {
-      name: studentName,
-      level: studentLevel,
-      user: user._id,
-    };
-    try {
-      const response = await postOne(`${api_url}/students/create`, body);
-      setStudentLevel(undefined);
-      setStudentName(undefined);
-      closeNewModal();
-      userAuthentication();
-      fetchStudents();
-      return response;
-    } catch (error) {
-      console.log('An error ocurred creating student', error);
-    }
+const NewStudentModal = ({ openModal, closeModal, newStudent, setNewStudent, handleCreateStudent }) => {
+  const handleInput = (key, value) => {
+    setNewStudent({ ...newStudent, [key]: value });
   };
 
   return (
-    <Modal open={newModal} onClose={closeNewModal}>
+    <Modal open={openModal} onClose={closeModal}>
       <Stack style={style} spacing={1}>
         <Typography variant='body1' fontWeight={600}>
           Nuevo alumno
@@ -59,16 +27,12 @@ const NewStudentModal = ({ newModal, setNewModal, fetchStudents }) => {
           id='studentName'
           required
           label='Nombre completo'
-          value={studentName}
+          value={newStudent?.name}
           onChange={(e) => {
-            setStudentName(e.target.value);
+            handleInput('name', e.target.value);
           }}
         />
-        <Select
-          value={studentLevel}
-          label='Edad'
-          onChange={(e) => setStudentLevel(e.target.value)}
-        >
+        <Select value={newStudent?.level} label='Edad' onChange={(e) => handleInput('level', e.target.value)}>
           <MenuItem value='3 años'>3 años</MenuItem>
           <MenuItem value='4 años'>4 años</MenuItem>
           <MenuItem value='5 años'>5 años</MenuItem>
@@ -79,7 +43,7 @@ const NewStudentModal = ({ newModal, setNewModal, fetchStudents }) => {
           <MenuItem value='5º primaria'>5º primaria</MenuItem>
           <MenuItem value='6º primaria'>6º primaria</MenuItem>
         </Select>
-        <Button onClick={createStudent}>Guardar</Button>
+        <Button onClick={handleCreateStudent}>Guardar</Button>
       </Stack>
     </Modal>
   );

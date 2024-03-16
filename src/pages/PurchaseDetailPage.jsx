@@ -1,11 +1,11 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { updateOne } from "../functions/api.calls";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../context/auth.context";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import axios from "axios";
-import ErrorPage from "./ErrorPage";
+import { useNavigate, useParams } from 'react-router-dom';
+import { updateOne } from '../functions/api.calls';
+import { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import axios from 'axios';
+import ErrorPage from './ErrorPage';
 
 const api_url = import.meta.env.VITE_API_URL;
 
@@ -15,7 +15,7 @@ function PurchasePage() {
   const [buyer, setBuyer] = useState(null);
   const [purchase, setPurchase] = useState(null);
   const { user } = useContext(AuthContext);
-  const [sold, setSold] = useState("");
+  const [sold, setSold] = useState('');
 
   const navigate = useNavigate();
   const { purchaseId, productId } = useParams();
@@ -37,12 +37,10 @@ function PurchasePage() {
     const fetchSeller = async () => {
       if (product) {
         try {
-          const sellerResponse = await axios.get(
-            `${api_url}/users/${product.seller}`
-          );
+          const sellerResponse = await axios.get(`${api_url}/users/${product.seller}`);
           setSeller(sellerResponse.data);
         } catch (error) {
-          console.error("Error fetching data:", error);
+          console.error('Error fetching data:', error);
         }
       }
     };
@@ -55,12 +53,10 @@ function PurchasePage() {
       if (seller && purchaseId) {
         try {
           // Fetch purchase information
-          const purchaseResponse = await axios.get(
-            `${api_url}/purchases/${purchaseId}`
-          );
+          const purchaseResponse = await axios.get(`${api_url}/purchases/${purchaseId}`);
           setPurchase(purchaseResponse.data);
         } catch (error) {
-          console.error("Error fetching data:", error);
+          console.error('Error fetching data:', error);
         }
       }
     };
@@ -72,12 +68,10 @@ function PurchasePage() {
       if (purchase) {
         try {
           // Fetch buyer information
-          const buyerResponse = await axios.get(
-            `${api_url}/users/${purchase.buyer}`
-          );
+          const buyerResponse = await axios.get(`${api_url}/users/${purchase.buyer}`);
           setBuyer(buyerResponse.data);
         } catch (error) {
-          console.error("Error fetching data:", error);
+          console.error('Error fetching data:', error);
         }
       }
     };
@@ -87,76 +81,70 @@ function PurchasePage() {
   const handleConfirmation = async () => {
     try {
       await updateOne(`${api_url}/purchases/${purchaseId}`, {
-        state: "completed",
+        state: 'completed',
       });
       await updateOne(`${api_url}/products/${productId}`, {
-        state: "sold",
+        state: 'sold',
         sold: true,
       });
     } catch (error) {
-      console.log("Error updating purchase/product data: ", error);
+      console.log('Error updating purchase/product data: ', error);
     }
-    navigate("/purchases");
+    navigate('/purchases');
   };
   const handleCancel = async () => {
     try {
       await updateOne(`${api_url}/purchases/${purchaseId}`, {
-        state: "cancelled",
+        state: 'cancelled',
       });
       await updateOne(`${api_url}/products/${productId}`, {
-        state: "available",
+        state: 'available',
         sold: false,
       });
     } catch (error) {
-      console.log(
-        "Error updating purchase/product data on cancellation: ",
-        error
-      );
+      console.log('Error updating purchase/product data on cancellation: ', error);
     }
-    navigate("/purchases");
+    navigate('/purchases');
   };
   const handleCancelRequest = async () => {
     try {
       await updateOne(`${api_url}/purchases/${purchaseId}`, {
-        state: "cancelled",
+        state: 'cancelled',
       });
       await updateOne(`${api_url}/products/${productId}`, {
-        state: "available",
+        state: 'available',
         sold: false,
       });
     } catch (error) {
-      console.log(
-        "Error updating purchase/product data on cancellation: ",
-        error
-      );
+      console.log('Error updating purchase/product data on cancellation: ', error);
     }
-    navigate("/purchases");
+    navigate('/purchases');
   };
 
   return product && buyer && seller ? (
     user._id === product.seller || user._id === purchase.buyer ? (
       <>
         <Navbar />
-        <div className="purchase-details-container">
-          <div className="purchase-details-image-container">
+        <div className='purchase-details-container'>
+          <div className='purchase-details-image-container'>
             <img src={product.imageUrl} alt={product.name} />
           </div>
-          <h3 className="purchase-details-price">€ {product.price}</h3>
-          <h3 className="purchase-details-title">{product.title}</h3>
-          <p className="purchase-details-description">{product.description}</p>
+          <h3 className='purchase-details-price'>€ {product.price}</h3>
+          <h3 className='purchase-details-title'>{product.title}</h3>
+          <p className='purchase-details-description'>{product.description}</p>
 
           <p>{product.condition}</p>
           <hr />
 
           {user._id === product.seller ? (
             <>
-              {product.state === "reserved" && (
+              {product.state === 'reserved' && (
                 <>
-                  <p className="purchase-details-buyer">
+                  <p className='purchase-details-buyer'>
                     <span>{buyer.fullname}</span> wants to buy this article.
                   </p>
 
-                  <div className="purchase-details-buttons">
+                  <div className='purchase-details-buttons'>
                     <button onClick={() => handleConfirmation()}>Accept</button>
 
                     <button onClick={() => handleCancel()}>Decline</button>
@@ -164,17 +152,17 @@ function PurchasePage() {
                 </>
               )}
 
-              {product.state === "sold" && (
+              {product.state === 'sold' && (
                 <>
-                  <p className="purchase-details-buyer">
+                  <p className='purchase-details-buyer'>
                     <span>{buyer.fullname}</span> bought this article.
                   </p>
                 </>
               )}
 
-              {product.state === "cancelled" && (
+              {product.state === 'cancelled' && (
                 <>
-                  <p className="purchase-details-buyer">
+                  <p className='purchase-details-buyer'>
                     <span>{buyer.fullname}</span> wanted to buy this article.
                   </p>
                 </>
@@ -183,10 +171,8 @@ function PurchasePage() {
           ) : (
             <>
               <p>Seller: {seller.fullname}</p>
-              <div className="purchase-details-buttons">
-                <button onClick={() => handleCancelRequest()}>
-                  Cancel Request
-                </button>
+              <div className='purchase-details-buttons'>
+                <button onClick={() => handleCancelRequest()}>Cancel Request</button>
               </div>
             </>
           )}
@@ -197,8 +183,8 @@ function PurchasePage() {
       <ErrorPage />
     )
   ) : (
-    <div className="loading-spinner-container">
-      <div className="loading-spinner"></div>
+    <div className='loading-spinner-container'>
+      <div className='loading-spinner'></div>
     </div>
   );
 }

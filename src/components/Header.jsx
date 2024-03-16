@@ -1,66 +1,56 @@
-import { useContext } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { AuthContext } from '../context/auth.context';
-import styled from 'styled-components';
+import { Button, Typography } from '@mui/material';
+import styled from '@emotion/styled';
+import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
+import useAuth from '../hooks/useAuth';
 
-const NavContainer = styled.nav`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #0ead99;
-  .title {
-    font-size: 1.5rem;
-    margin: 1rem;
-    font-weight: 600;
-    text-decoration: none;
-    color: white;
-  }
-  ul {
-    display: flex;
-  }
-  ul li {
-    list-style: none;
-  }
-  ul li a {
-    display: block;
-    text-decoration: none;
-    color: white;
-    padding: 0.5rem;
-    margin: 0 0.5rem;
-    border-radius: 0.3rem;
-  }
-`;
+//////////////////////////////////////
+////////// Styles ////////////////////
+//////////////////////////////////////
 
-function Navbar() {
-  const { isLoggedIn } = useContext(AuthContext);
+const StyledButton = styled(Button)({
+  color: 'white',
+});
+const NavigationLink = ({ children, ...rest }) => {
+  return <StyledButton {...rest}>{children}</StyledButton>;
+};
 
+//////////////////////////////////////
+////////// Component render //////////
+//////////////////////////////////////\
+
+function Header() {
+  const { isLoggedIn } = useAuth();
   return (
-    <NavContainer>
-      <Link to='/' className='title'>
-        Inicio
-      </Link>
-      <ul>
-        <li>
-          <NavLink to='/activities'>Actividades</NavLink>
-        </li>
-        {!isLoggedIn && (
-          <li>
-            <NavLink to='/signup'>Registro</NavLink>
-          </li>
+    <Grid2 container backgroundColor='#0ead99' height={80} id='Header' mb={4} xs={12}>
+      <Grid2 container spacing={5} justifyContent='center' alignItems='center' width={1200} maxWidth='95%' sx={{ margin: '0 auto' }} xs={12}>
+        <Grid2>
+          <NavigationLink href='/actividades'>
+            <Typography variant='body'>Actividades</Typography>
+          </NavigationLink>
+        </Grid2>
+        {!isLoggedIn ? (
+          <>
+            <Grid2>
+              <NavigationLink href='/registro'>
+                <Typography variant='body'>Registro</Typography>
+              </NavigationLink>
+            </Grid2>
+            <Grid2>
+              <NavigationLink href='/acceso'>
+                <Typography variant='body'>Acceso</Typography>
+              </NavigationLink>
+            </Grid2>
+          </>
+        ) : (
+          <Grid2>
+            <NavigationLink href='/perfil'>
+              <Typography variant='body'>Mi cuenta</Typography>
+            </NavigationLink>
+          </Grid2>
         )}
-        {!isLoggedIn && (
-          <li>
-            <NavLink to='/login'>Acceso</NavLink>
-          </li>
-        )}
-        {isLoggedIn && (
-          <li>
-            <NavLink to='/profile'>Mi cuenta</NavLink>
-          </li>
-        )}
-      </ul>
-    </NavContainer>
+      </Grid2>
+    </Grid2>
   );
 }
 
-export default Navbar;
+export default Header;

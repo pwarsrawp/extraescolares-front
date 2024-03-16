@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const api_url = import.meta.env.VITE_API_URL;
 const AuthContext = createContext();
 
-function AuthContextWrapper(props) {
+function AuthContextProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
@@ -29,7 +29,6 @@ function AuthContextWrapper(props) {
   /* AUTHENTICATION */
   const userAuthentication = async () => {
     const token = localStorage.getItem('authToken');
-
     if (token) {
       try {
         const { data } = await axios.get(`${api_url}/auth/verify`, {
@@ -44,12 +43,13 @@ function AuthContextWrapper(props) {
         setUser(null);
         setIsLoggedIn(false);
         setIsLoading(false);
+        navigate('/acceso')
       }
     } else {
       // reset states
       setUser(null);
       setIsLoggedIn(false);
-      setIsLoading(false);
+      setIsLoading(false);      
     }
   };
 
@@ -83,9 +83,10 @@ function AuthContextWrapper(props) {
         logout,
       }}
     >
-      {props.children}
+      {children}
     </AuthContext.Provider>
   );
 }
 
-export { AuthContext, AuthContextWrapper };
+export { AuthContext };
+export default AuthContextProvider;
